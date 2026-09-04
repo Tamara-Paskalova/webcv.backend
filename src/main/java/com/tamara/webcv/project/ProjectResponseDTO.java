@@ -1,0 +1,22 @@
+package com.tamara.webcv.project;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProjectResponseDTO {
+    private Long id;
+    private boolean isInProgress;
+    private String name;
+    private String description;
+    private List<String> technologies;
+    private String githubUrl;
+    private String projectUrl;
+    private String imageUrl;
+    private int priority;
+}
