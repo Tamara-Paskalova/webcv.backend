@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -30,8 +31,8 @@ public class ContentController {
     }
 
     @GetMapping("/content") //TODO implement getBySection
-    public ResponseEntity<Map<String, ContentData>> getContent(Locale locale) {
-        Map<String, ContentData> contentResponseDTO = service.getLocalizedContent(locale);
+    public ResponseEntity<List<ContentResponseDTO>> getContent(Locale locale) {
+        List<ContentResponseDTO> contentResponseDTO = service.getLocalizedContent(locale);
         return new ResponseEntity<>(contentResponseDTO, HttpStatus.OK);
     }
 

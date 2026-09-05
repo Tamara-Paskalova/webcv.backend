@@ -2,7 +2,6 @@ package com.tamara.webcv.content;
 
 import com.tamara.webcv.content.model.ContentData;
 import com.tamara.webcv.content.model.TextContentData;
-import org.apache.http.protocol.HTTP;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -12,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -55,17 +55,17 @@ class ContentControllerTest {
         Locale locale = Locale.of("en");
         TextContentData contentData = new TextContentData();
         contentData.setContentType("dummy");
-        Map<String, ContentData> contentMap = Map.of("dummy_section", contentData);
+        List<ContentResponseDTO> contentList = List.of(new ContentResponseDTO("dummy_section", contentData));
         ArgumentCaptor<Locale> localeArgumentCaptor = ArgumentCaptor.forClass(Locale.class);
 
-        when(service.getLocalizedContent(any())).thenReturn(contentMap);
+        when(service.getLocalizedContent(any())).thenReturn(contentList);
 
-        ResponseEntity<Map<String, ContentData>> response = controller.getContent(locale);
+        ResponseEntity<List<ContentResponseDTO>> response = controller.getContent(locale);
 
         verify(service).getLocalizedContent(localeArgumentCaptor.capture());
 
         assertEquals(locale, localeArgumentCaptor.getValue());
-        assertEquals(contentMap, response.getBody());
+        assertEquals(contentList, response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 

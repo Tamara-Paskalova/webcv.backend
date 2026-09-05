@@ -1,9 +1,9 @@
 package com.tamara.webcv.content;
 
+import com.tamara.webcv.content.model.ContentData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import tools.jackson.databind.JsonNode;
 
 @Data
 @NoArgsConstructor
@@ -11,5 +11,5 @@ import tools.jackson.databind.JsonNode;
 public class ContentResponseDTO {
 
     private String sectionName;
-    private JsonNode contentData; //TODO convert to ContentData
+    private ContentData contentData;
 }

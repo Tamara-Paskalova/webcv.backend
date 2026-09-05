@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,17 +45,17 @@ public class ContentService {
         return toDto(saved);
     }
 
-    public Map<String, ContentData> getLocalizedContent(Locale locale) {
+    public List<ContentResponseDTO> getLocalizedContent(Locale locale) {
         String lang = locale.getLanguage();
 
         return repository.findAll().stream()
-                .collect(Collectors.toMap(
-                        Content::getSectionName,
-                        content -> {
-                            ContentData rawData = content.getContentData();
-                            return rawData.getLocalizedContent(lang);
-                        }
-                ));
+                .map(content -> {
+                    ContentData rawData = content.getContentData();
+                    ContentData localizedData = rawData.getLocalizedContent(lang);
+                    return new Content(content.getSectionName(), localizedData);
+                })
+                .map(this::toDto)
+                .toList();
     }
 
     @Transactional
@@ -76,8 +77,7 @@ public class ContentService {
     }
 
     private ContentResponseDTO toDto(Content content) {
-        JsonNode jsonNode = objectMapper.valueToTree(content.getContentData());
-        return new ContentResponseDTO(content.getSectionName(), jsonNode);
+        return new ContentResponseDTO(content.getSectionName(), content.getContentData());
 
     }
 }
