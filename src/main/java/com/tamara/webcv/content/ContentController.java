@@ -1,0 +1,44 @@
+package com.tamara.webcv.content;
+
+import com.tamara.webcv.content.model.ContentData;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Locale;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api")
+public class ContentController {
+
+    @Autowired
+    private ContentService service;
+
+    @PostMapping("/admin/content/{sectionName}")
+    public ResponseEntity<ContentResponseDTO> saveContent(@PathVariable String sectionName, @Valid @RequestBody ContentRequestDTO dto) {
+        ContentResponseDTO contentResponseDTO = service.saveContent(dto, sectionName);
+        return new ResponseEntity<>(contentResponseDTO, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/content") //TODO implement getBySection
+    public ResponseEntity<Map<String, ContentData>> getContent(Locale locale) {
+        Map<String, ContentData> contentResponseDTO = service.getLocalizedContent(locale);
+        return new ResponseEntity<>(contentResponseDTO, HttpStatus.OK);
+    }
+
+    @PatchMapping("/admin/content/{sectionName}")
+    public ResponseEntity<ContentResponseDTO> updateContent(@PathVariable String sectionName, @Valid @RequestBody ContentRequestDTO dto) {
+        ContentResponseDTO contentResponseDTO = service.updateContent(dto, sectionName);
+        return new ResponseEntity<>(contentResponseDTO, HttpStatus.CREATED);
+    }
+
+}

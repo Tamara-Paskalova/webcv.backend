@@ -1,6 +1,7 @@
 package com.tamara.webcv.exception;
 
 import com.tamara.webcv.core.dto.ErrorResponse;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,17 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(
                         "FILE_NOT_FOUND_ERROR",
                         exception.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException exception) {
+        log.error("Invalid input", exception);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(
+                        "INPUT_VALIDATION_ERROR",
+                        "Invalid input"
                 ));
     }
 

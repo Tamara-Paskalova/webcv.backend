@@ -4,7 +4,9 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SafeTextValidator implements ConstraintValidator<SafeText, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {

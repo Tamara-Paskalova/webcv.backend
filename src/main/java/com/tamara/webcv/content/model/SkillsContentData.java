@@ -18,10 +18,15 @@ public class SkillsContentData implements ContentData {
     private boolean isVisible = true;
     @NotEmpty(message = "{validation.notblank}")
     @SafeStringList
-    private List<String> skills;
+    private List<String> textElements;
 
     @Override
     public String getContentType() {
         return this.contentType;
+    }
+
+    @Override
+    public ContentData getLocalizedContent(String lang) {
+        return null;
     }
 }

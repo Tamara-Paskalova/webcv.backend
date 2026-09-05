@@ -8,7 +8,8 @@ import com.tamara.webcv.core.Constants;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "contentType"
+        property = "contentType",
+        visible = true
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(
@@ -23,4 +24,6 @@ import com.tamara.webcv.core.Constants;
 public interface ContentData {
 
     String getContentType();
+
+    ContentData getLocalizedContent(String lang);
 }
