@@ -35,8 +35,7 @@ public class ContentService {
             throw new ConstraintViolationException(violations);
         }
 
-        Content content = repository.findBySectionName(sectionName).orElse(new Content());
-
+        Content content = new Content();
         content.setSectionName(sectionName);
         content.setContentData(contentData);
 
