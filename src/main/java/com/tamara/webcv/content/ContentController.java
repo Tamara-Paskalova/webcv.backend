@@ -1,6 +1,5 @@
 package com.tamara.webcv.content;
 
-import com.tamara.webcv.content.model.ContentData;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -30,10 +28,16 @@ public class ContentController {
         return new ResponseEntity<>(contentResponseDTO, HttpStatus.CREATED);
     }
 
-    @GetMapping("/content") //TODO implement getBySection
-    public ResponseEntity<List<ContentResponseDTO>> getContent(Locale locale) {
+    @GetMapping("/content")
+    public ResponseEntity<List<ContentResponseDTO>> getAllLocalizedContent(Locale locale) {
         List<ContentResponseDTO> contentResponseDTO = service.getLocalizedContent(locale);
         return new ResponseEntity<>(contentResponseDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/content/all")
+    public ResponseEntity<List<ContentResponseDTO>> getAllContent() {
+        List<ContentResponseDTO> contentResponseDTOS = service.getContent();
+        return new ResponseEntity<>(contentResponseDTOS, HttpStatus.OK);
     }
 
     @PatchMapping("/admin/content/{sectionName}")

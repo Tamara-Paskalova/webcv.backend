@@ -7,13 +7,9 @@ import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class ContentService {
@@ -22,21 +18,17 @@ public class ContentService {
     private ContentRepository repository;
 
     @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
     private Validator validator;
 
     public ContentResponseDTO saveContent(ContentRequestDTO dto, String sectionName) {
         ContentData contentData = dto.getContentData();
 
         var violations = validator.validate(contentData);
-
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
 
-        Content content = new Content();
+        Content content = repository.findBySectionName(sectionName).orElse(new Content());
         content.setSectionName(sectionName);
         content.setContentData(contentData);
 
@@ -54,6 +46,13 @@ public class ContentService {
                     ContentData localizedData = rawData.getLocalizedContent(lang);
                     return new Content(content.getSectionName(), localizedData);
                 })
+                .map(this::toDto)
+                .toList();
+    }
+
+    public List<ContentResponseDTO> getContent() {
+        List<Content> contents = repository.findAll();
+        return contents.stream()
                 .map(this::toDto)
                 .toList();
     }

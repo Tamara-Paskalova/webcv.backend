@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SkillsContentData implements ContentData {
+public class SkillsContentData implements ContentData { // TODO add tests
 
     private String contentType = Constants.SECTION_CONTENT_TYPE_SKILLS;
     private boolean isVisible = true;

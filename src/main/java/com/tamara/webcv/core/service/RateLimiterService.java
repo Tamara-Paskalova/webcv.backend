@@ -17,11 +17,11 @@ public class RateLimiterService {
     private final int permittedDailyRequestCount = 5;
     private final long permittedMinutesFromLastRequest = 1;
 
-    public void checkLimit(String ip) {
-        isLimitExceeded(ip);
+    public boolean checkLimit(String ip) {
+        return isLimitExceeded(ip);
     }
 
-    protected boolean isLimitExceeded(String ip) {
+    private boolean isLimitExceeded(String ip) {
         LocalDateTime now = LocalDateTime.now();
 
         ClientRequest clientRequest = ipCache.get(ip);
