@@ -14,8 +14,8 @@ import java.util.Set;
 @Component
 public class ImageValidator implements MediaValidator {
 
-    private static final int MIN_WIDTH = 640;
-    private static final int MIN_HEIGHT = 480;
+    private static final int MIN_WIDTH = 400;
+    private static final int MIN_HEIGHT = 400;
 
     private static final Set<String> ALLOWED_FORMATS =
             Set.of("jpeg", "jpg", "png", "webp");

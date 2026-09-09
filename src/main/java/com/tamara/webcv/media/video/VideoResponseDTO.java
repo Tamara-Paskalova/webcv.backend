@@ -1,14 +1,16 @@
 package com.tamara.webcv.media.video;
 
 import com.tamara.webcv.core.MediaMetadata;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.tamara.webcv.media.MediaResponseDTO;
+import lombok.*;
 
-@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
-@AllArgsConstructor
-public class VideoResponseDTO {
-    private String videoUrl;
-    private MediaMetadata mediaMetadata;
+@Getter
+@Setter
+public class VideoResponseDTO extends MediaResponseDTO {
+    public VideoResponseDTO(long id, MediaMetadata mediaMetadata, String fileUrl) {
+        super(id, mediaMetadata, fileUrl);
+    }
 }

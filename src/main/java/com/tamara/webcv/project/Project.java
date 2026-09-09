@@ -1,6 +1,7 @@
 package com.tamara.webcv.project;
 
 import com.tamara.webcv.core.BaseEntity;
+import com.tamara.webcv.media.image.Image;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -38,8 +39,8 @@ public class Project extends BaseEntity {
     @Column(name = "PROJECT_URL")
     private String projectUrl;
 
-    @Column(name = "PROJECT_IMAGE_KEY")
-    private String projectImageKey;
+    @OneToOne
+    private Image image;
 
     @Column(name = "PRIORITY", nullable = false)
     private Integer priority;

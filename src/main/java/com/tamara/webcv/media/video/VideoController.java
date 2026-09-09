@@ -15,13 +15,13 @@ public class VideoController {
 
     @PostMapping("/admin/video")
     public ResponseEntity<Void> uploadVideo(@Valid @ModelAttribute VideoRequestDTO dto) {
-        service.uploadVideo(dto);
+        service.uploadFile(dto.getFile());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/video")
-    public ResponseEntity<VideoResponseDTO> getVideo() {
-        VideoResponseDTO video = service.getVideo();
-        return ResponseEntity.status(HttpStatus.OK).body(video);
-    }
+//    @GetMapping("/video")
+//    public ResponseEntity<VideoResponseDTO> getVideo() {
+//        VideoResponseDTO video = service.getVideo();
+//        return ResponseEntity.status(HttpStatus.OK).body(video);
+//    }
 }

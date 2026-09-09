@@ -2,6 +2,9 @@ package com.tamara.webcv.project;
 
 import com.tamara.webcv.core.service.FileStorageService;
 import com.tamara.webcv.exception.ObjectNotFoundException;
+import com.tamara.webcv.media.MediaResponseDTO;
+import com.tamara.webcv.media.MediaService;
+import com.tamara.webcv.media.image.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,20 +19,14 @@ public class ProjectService {
     private ProjectRepository repository;
 
     @Autowired
-    private FileStorageService storageService;
+    private MediaService<Image> mediaService;
 
     @Transactional
     public void saveProject(ProjectRequestDTO dto) {
-        MultipartFile image = dto.getFile();
-        String imageKey = storageService.uploadFile(image, folder);
-        Project project = toEntity(dto, imageKey);
+        Image image = mediaService.uploadFile(dto.getFile());
+        Project project = toEntity(dto, image);
 
-        try {
-            repository.save(project);
-        } catch (Exception e) {
-            storageService.deleteFile(imageKey);
-            throw e;
-        }
+        repository.save(project);
     }
 
     public List<ProjectResponseDTO> getProjects() {
@@ -43,14 +40,14 @@ public class ProjectService {
         Project project = repository.findById(id).orElseThrow(() ->
              new ObjectNotFoundException("Can't find project with Id %s.".formatted(id)));
 
-        String imageKey = project.getProjectImageKey();
-        storageService.deleteFile(imageKey);
+        Image image = project.getImage();
+        mediaService.delete(image);
         repository.deleteById(id);
     }
 
 
 
-    private Project toEntity(ProjectRequestDTO dto, String imageKey) {
+    private Project toEntity(ProjectRequestDTO dto, Image image) {
         Project project = new Project();
 
         project.setInProgress(dto.isInProgress());
@@ -59,7 +56,7 @@ public class ProjectService {
         project.setGithubUrl(dto.getGithubUrl());
         project.setProjectUrl(dto.getProjectUrl());
         project.setTechnologies(dto.getTechnologies());
-        project.setProjectImageKey(imageKey);
+        project.setImage(image);
         project.setPriority(dto.getPriority());
 
         return project;
@@ -69,10 +66,11 @@ public class ProjectService {
         ProjectResponseDTO dto = new ProjectResponseDTO();
         String githubUrl = project.getGithubUrl();
         String projectUrl = project.getProjectUrl();
-        String imageKey = project.getProjectImageKey();
+        Image image = project.getImage();
 
-        if (imageKey != null && !imageKey.isBlank()) {
-            dto.setImageUrl(storageService.getFileUrl(imageKey));
+        if (image != null) {
+            MediaResponseDTO media = mediaService.getMedia(image);
+            dto.setImage(media);
         }
         dto.setId(project.getId());
         dto.setName(project.getName());
