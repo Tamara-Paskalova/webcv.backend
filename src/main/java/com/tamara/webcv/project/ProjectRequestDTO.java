@@ -2,7 +2,7 @@ package com.tamara.webcv.project;
 
 import com.tamara.webcv.validation.SafeStringList;
 import com.tamara.webcv.validation.SafeText;
-import com.tamara.webcv.validation.ValidFile;
+import com.tamara.webcv.validation.ValidImage;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,7 +40,7 @@ public class ProjectRequestDTO {
     @SafeText
     private String projectUrl;
 
-    @ValidFile
+    @ValidImage
     @NotNull(message = "{validation.notblank}")
     private MultipartFile file;
 
