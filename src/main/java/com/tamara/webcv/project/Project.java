@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -40,6 +42,8 @@ public class Project extends BaseEntity {
     private String projectUrl;
 
     @OneToOne
+    @JoinColumn(name = "IMAGE_ID")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Image image;
 
     @Column(name = "PRIORITY", nullable = false)

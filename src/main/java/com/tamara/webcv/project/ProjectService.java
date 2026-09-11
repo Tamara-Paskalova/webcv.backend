@@ -1,36 +1,32 @@
 package com.tamara.webcv.project;
 
-import com.tamara.webcv.core.service.FileStorageService;
 import com.tamara.webcv.exception.ObjectNotFoundException;
-import com.tamara.webcv.media.MediaResponseDTO;
 import com.tamara.webcv.media.MediaService;
 import com.tamara.webcv.media.image.Image;
+import com.tamara.webcv.media.image.ImageResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
 public class ProjectService {
-    private final String folder = "projectImage";
+    private final String folder = "projectImages";
     @Autowired
     private ProjectRepository repository;
 
     @Autowired
     private MediaService<Image> mediaService;
 
-    @Transactional
     public void saveProject(ProjectRequestDTO dto) {
-        Image image = mediaService.uploadFile(dto.getFile());
+        Image image = mediaService.internalSaveOrUpdate(dto.getFile(), null, folder);
         Project project = toEntity(dto, image);
 
         repository.save(project);
     }
 
     public List<ProjectResponseDTO> getProjects() {
-        return repository.findAllByOrderByPriorityDesc()
+        return repository.findAllByOrderByPriorityDescWithImages()
                 .stream()
                 .map(this::toDto)
                 .toList();
@@ -69,8 +65,8 @@ public class ProjectService {
         Image image = project.getImage();
 
         if (image != null) {
-            MediaResponseDTO media = mediaService.getMedia(image);
-            dto.setImage(media);
+            ImageResponseDTO imageResponseDTO = (ImageResponseDTO) mediaService.buildResponseDTO(image);
+            dto.setImage(imageResponseDTO);
         }
         dto.setId(project.getId());
         dto.setName(project.getName());

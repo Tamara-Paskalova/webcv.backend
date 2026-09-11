@@ -1,7 +1,9 @@
 package com.tamara.webcv.project;
 
-import com.tamara.webcv.core.service.FileStorageService;
 import com.tamara.webcv.exception.ObjectNotFoundException;
+import com.tamara.webcv.media.MediaService;
+import com.tamara.webcv.media.image.Image;
+import com.tamara.webcv.media.image.ImageResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -24,19 +26,21 @@ class ProjectServiceTest {
     private ProjectRepository  repository;
 
     @Mock
-    private FileStorageService storageService;
+    private MediaService<Image> mediaService;
 
     @InjectMocks
     private ProjectService service;
 
     @Test
     void saveProject() {
-        String dummyName = "Some name";
-        String dummyKey = "imageKey";
+        String dummyProjectName = "Some name";
+        String dummyImageFileName = "imageKey";
+        Image image = new Image();
+        image.setUniqueFileName(dummyImageFileName);
         ProjectRequestDTO dto = new ProjectRequestDTO();
-        dto.setName(dummyName);
+        dto.setName(dummyProjectName);
 
-        when(storageService.uploadFile(any(), any())).thenReturn(dummyKey);
+        when(mediaService.internalSaveOrUpdate(any(), any(), anyString())).thenReturn(image);
 
         service.saveProject(dto);
         ArgumentCaptor<Project> captor = ArgumentCaptor.forClass(Project.class);
@@ -44,66 +48,63 @@ class ProjectServiceTest {
 
         Project project = captor.getValue();
 
-        assertEquals(dummyName, project.getName());
-        assertEquals(dummyKey, project.getProjectImageKey());
-
-    }
-
-    @Test
-    void saveProjectThrowsException() {
-        String dummyKey = "imageKey";
-        ProjectRequestDTO dto = new ProjectRequestDTO();
-
-        when(storageService.uploadFile(any(), any())).thenReturn(dummyKey);
-        when(repository.save(any())).thenThrow(NullPointerException.class);
-
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        assertThrows(NullPointerException.class, () -> service.saveProject(dto));
-        verify(storageService).deleteFile(captor.capture());
-
-        String key = captor.getValue();
-
-        assertEquals(dummyKey, key);
+        assertEquals(dummyProjectName, project.getName());
+        assertEquals(dummyImageFileName, project.getImage().getUniqueFileName());
     }
 
     @Test
     void getProjects() {
-        Project firstProject = new Project();
-        Project secondProject = new Project();
-        Project thirdProject = new Project();
-        firstProject.setName("first name");
-        firstProject.setPriority(3);
-        firstProject.setProjectImageKey("imageKey");
-        secondProject.setName("second name");
-        secondProject.setPriority(1);
-        thirdProject.setName("third name");
-        thirdProject.setPriority(2);
-        List<Project> projects = List.of(firstProject, thirdProject, secondProject);
+        List<Project> projects = getProjectList();
+        ImageResponseDTO dto = new ImageResponseDTO();
+        dto.setId(1L);
 
-        when(repository.findAllByOrderByPriorityDesc()).thenReturn(projects);
-
+        when(repository.findAllByOrderByPriorityDescWithImages()).thenReturn(projects);
+        when(mediaService.buildResponseDTO(any())).thenReturn(dto);
         List<ProjectResponseDTO> response = service.getProjects();
-        verify(storageService).getFileUrl("imageKey");
 
         assertEquals(3, response.size());
         assertEquals("first name", response.getFirst().getName());
         assertEquals("third name", response.get(1).getName());
         assertEquals("second name", response.get(2).getName());
+        assertEquals(1L, response.getFirst().getImage().getId());
+    }
+
+    private List<Project> getProjectList() {
+        Image firstImage = new Image();
+        firstImage.setId(1L);
+        Project firstProject = new Project();
+        Project secondProject = new Project();
+        Project thirdProject = new Project();
+        firstProject.setName("first name");
+        firstProject.setPriority(3);
+        firstProject.setImage(firstImage);
+        secondProject.setName("second name");
+        secondProject.setPriority(1);
+        thirdProject.setName("third name");
+        thirdProject.setPriority(2);
+        return List.of(firstProject, thirdProject, secondProject);
     }
 
     @Test
     void deleteProject() {
-        Long id = (long) 1;
+        Long id = 1L;
         Project project = new Project();
+        Image image = new Image();
+        image.setId(id);
         project.setId(id);
-        project.setProjectImageKey("imageKey");
+        project.setImage(image);
 
         when(repository.findById(any())).thenReturn(Optional.of(project));
 
         service.deleteProject(id);
 
-        verify(storageService).deleteFile("imageKey");
+        ArgumentCaptor<Image> imageArgumentCaptor = ArgumentCaptor.forClass(Image.class);
+        verify(mediaService).delete(imageArgumentCaptor.capture());
         verify(repository).deleteById(id);
+
+        Image captured = imageArgumentCaptor.getValue();
+
+        assertEquals(id, captured.getId());
     }
 
     @Test
@@ -111,7 +112,7 @@ class ProjectServiceTest {
         when(repository.findById(any())).thenReturn(Optional.empty());
 
         assertThrows(ObjectNotFoundException.class, () -> service.deleteProject((long) 1));
-        verifyNoInteractions(storageService);
+        verifyNoInteractions(mediaService);
         verify(repository, never()).deleteById(any());
     }
 }

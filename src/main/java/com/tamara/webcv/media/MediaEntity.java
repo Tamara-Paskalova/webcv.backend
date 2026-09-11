@@ -1,7 +1,6 @@
 package com.tamara.webcv.media;
 
 import com.tamara.webcv.core.BaseEntity;
-import com.tamara.webcv.core.MediaMetadata;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.EqualsAndHashCode;
@@ -18,7 +17,7 @@ import org.hibernate.type.SqlTypes;
 @ToString(callSuper = true)
 public abstract class MediaEntity extends BaseEntity {
     @Column(name = "PATH_KEY")
-    private String pathKey;
+    private String uniqueFileName;
 
     @Column(name = "METADATA", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)

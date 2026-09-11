@@ -1,6 +1,6 @@
 package com.tamara.webcv.project;
 
-import com.tamara.webcv.media.MediaResponseDTO;
+import com.tamara.webcv.media.image.ImageResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +18,6 @@ public class ProjectResponseDTO {
     private List<String> technologies;
     private String githubUrl;
     private String projectUrl;
-    private MediaResponseDTO image;
+    private ImageResponseDTO image;
     private int priority;
 }

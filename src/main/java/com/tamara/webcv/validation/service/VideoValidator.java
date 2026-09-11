@@ -1,6 +1,9 @@
 package com.tamara.webcv.validation.service;
 
+import com.tamara.webcv.core.Constants;
 import com.tamara.webcv.exception.InvalidMediaException;
+import com.tamara.webcv.media.video.Video;
+import com.tamara.webcv.media.video.VideoRequestDTO;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.springframework.stereotype.Component;
@@ -13,7 +16,7 @@ import java.time.Duration;
 import java.util.Set;
 
 @Component
-public class VideoValidator implements MediaValidator {
+public class VideoValidator extends MediaValidator<Video> {
 
     private static final Duration MAX_DURATION =
             Duration.ofMinutes(10);
@@ -25,23 +28,25 @@ public class VideoValidator implements MediaValidator {
             Set.of("h264", "hevc");
 
     @Override
-    public void validate(MultipartFile file) {
+    protected VideoRequestDTO createRequestDTO(MultipartFile file) {
+        return new VideoRequestDTO(Constants.MEDIA_TYPE_VIDEO, file);
+    }
+
+    @Override
+    protected ValidationResult validateContent(MultipartFile file) {
 
         Path tempFile = null;
 
         try {
             tempFile = createTempFile(file);
 
-            validateTempFile(tempFile);
+            return validateTempFile(tempFile);
 
         } catch (InvalidMediaException e) {
             throw e;
 
         } catch (Exception e) {
-            throw new InvalidMediaException(
-                    "Invalid or corrupted video",
-                    e
-            );
+            throw new InvalidMediaException("Invalid or corrupted video", e);
 
         } finally {
             deleteTempFile(tempFile);
@@ -62,7 +67,7 @@ public class VideoValidator implements MediaValidator {
         return tempFile;
     }
 
-    private void validateTempFile(Path file) {
+    private ValidationResult validateTempFile(Path file) {
 
         try (FFmpegFrameGrabber grabber =
                      new FFmpegFrameGrabber(file.toFile())) {
@@ -71,8 +76,10 @@ public class VideoValidator implements MediaValidator {
 
             validateFormat(grabber);
             validateVideoStream(grabber);
-            validateVideoMetadata(grabber);
+            ValidationResult validationResult = validateVideoMetadata(grabber);
             validateDecoding(grabber);
+
+            return validationResult;
 
         } catch (InvalidMediaException e) {
             throw e;
@@ -129,18 +136,16 @@ public class VideoValidator implements MediaValidator {
         }
     }
 
-    private void validateVideoMetadata(
-            FFmpegFrameGrabber grabber
-    ) {
+    private ValidationResult validateVideoMetadata(FFmpegFrameGrabber grabber) {
 
-        validateResolution(grabber);
+        ValidationResult validationResult = validateResolution(grabber);
         validateCodec(grabber);
         validateDuration(grabber);
+
+        return validationResult;
     }
 
-    private void validateResolution(
-            FFmpegFrameGrabber grabber
-    ) {
+    private ValidationResult validateResolution(FFmpegFrameGrabber grabber) {
 
         int width = grabber.getImageWidth();
         int height = grabber.getImageHeight();
@@ -152,6 +157,8 @@ public class VideoValidator implements MediaValidator {
                     "Video resolution must be at least 1280x720"
             );
         }
+
+        return new ValidationResult.Visual(width, height);
     }
 
     private void validateCodec(

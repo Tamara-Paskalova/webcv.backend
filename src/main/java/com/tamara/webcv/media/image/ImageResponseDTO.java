@@ -1,6 +1,6 @@
 package com.tamara.webcv.media.image;
 
-import com.tamara.webcv.core.MediaMetadata;
+import com.tamara.webcv.media.MediaMetadata;
 import com.tamara.webcv.media.MediaResponseDTO;
 import lombok.*;
 

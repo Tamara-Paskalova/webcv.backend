@@ -1,5 +1,6 @@
-package com.tamara.webcv.core;
+package com.tamara.webcv.media;
 
+import com.tamara.webcv.validation.service.ValidationResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,4 +13,5 @@ public class MediaMetadata {
     private long size;
     private String contentType;
     private String originalFileName;
+    private ValidationResult validationResult;
 }

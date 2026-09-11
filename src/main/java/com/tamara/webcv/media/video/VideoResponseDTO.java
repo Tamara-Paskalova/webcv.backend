@@ -1,6 +1,6 @@
 package com.tamara.webcv.media.video;
 
-import com.tamara.webcv.core.MediaMetadata;
+import com.tamara.webcv.media.MediaMetadata;
 import com.tamara.webcv.media.MediaResponseDTO;
 import lombok.*;
 
@@ -10,7 +10,12 @@ import lombok.*;
 @Getter
 @Setter
 public class VideoResponseDTO extends MediaResponseDTO {
-    public VideoResponseDTO(long id, MediaMetadata mediaMetadata, String fileUrl) {
+
+    private int version;
+
+    public VideoResponseDTO(long id, MediaMetadata mediaMetadata, String fileUrl, int version) {
         super(id, mediaMetadata, fileUrl);
+
+        this.version = version;
     }
 }

@@ -1,6 +1,9 @@
 package com.tamara.webcv.validation.service;
 
+import com.tamara.webcv.core.Constants;
 import com.tamara.webcv.exception.InvalidMediaException;
+import com.tamara.webcv.media.image.Image;
+import com.tamara.webcv.media.image.ImageRequestDTO;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.springframework.stereotype.Component;
@@ -12,7 +15,7 @@ import java.nio.file.Path;
 import java.util.Set;
 
 @Component
-public class ImageValidator implements MediaValidator {
+public class ImageValidator extends MediaValidator<Image> {
 
     private static final int MIN_WIDTH = 400;
     private static final int MIN_HEIGHT = 400;
@@ -21,14 +24,19 @@ public class ImageValidator implements MediaValidator {
             Set.of("jpeg", "jpg", "png", "webp");
 
     @Override
-    public void validate(MultipartFile file) {
+    protected ImageRequestDTO createRequestDTO(MultipartFile file) {
+        return new ImageRequestDTO(Constants.MEDIA_TYPE_IMAGE, file);
+    }
+
+    @Override
+    protected ValidationResult validateContent(MultipartFile file) {
 
         Path tempFile = null;
 
         try {
             tempFile = createTempFile(file);
 
-            validateTempFile(tempFile);
+            return validateTempFile(tempFile);
 
         } catch (InvalidMediaException e) {
             throw e;
@@ -58,7 +66,7 @@ public class ImageValidator implements MediaValidator {
         return tempFile;
     }
 
-    private void validateTempFile(Path file) {
+    private ValidationResult validateTempFile(Path file) {
 
         try (FFmpegFrameGrabber grabber =
                      new FFmpegFrameGrabber(file.toFile())) {
@@ -66,8 +74,10 @@ public class ImageValidator implements MediaValidator {
             grabber.start();
 
             validateFormat(grabber);
-            validateImage(grabber);
+            ValidationResult validationResult = validateImage(grabber);
             validateDecoding(grabber);
+
+            return validationResult;
 
         } catch (InvalidMediaException e) {
             throw e;
@@ -106,7 +116,7 @@ public class ImageValidator implements MediaValidator {
         }
     }
 
-    private void validateImage(
+    private ValidationResult validateImage(
             FFmpegFrameGrabber grabber
     ) {
 
@@ -135,6 +145,8 @@ public class ImageValidator implements MediaValidator {
                     "Image resolution must be at least 640x480"
             );
         }
+
+        return new ValidationResult.Visual(width, height);
     }
 
     private void validateDecoding(
