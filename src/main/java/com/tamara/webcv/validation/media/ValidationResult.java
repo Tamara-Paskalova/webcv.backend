@@ -1,4 +1,4 @@
-package com.tamara.webcv.validation.service;
+package com.tamara.webcv.validation.media;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

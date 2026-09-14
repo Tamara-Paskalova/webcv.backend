@@ -92,6 +92,12 @@
 			<artifactId>ffmpeg-platform</artifactId>
 			<version>${ffmpeg.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>3.0.3</version> <!-- Актуальная стабильная версия на 2026 год -->
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

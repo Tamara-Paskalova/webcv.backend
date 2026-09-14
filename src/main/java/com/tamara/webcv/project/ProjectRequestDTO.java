@@ -2,7 +2,7 @@ package com.tamara.webcv.project;
 
 import com.tamara.webcv.validation.SafeStringList;
 import com.tamara.webcv.validation.SafeText;
-import com.tamara.webcv.validation.ValidImage;
+import com.tamara.webcv.validation.media.ValidImage;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

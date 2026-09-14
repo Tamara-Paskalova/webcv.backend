@@ -1,4 +1,4 @@
-package com.tamara.webcv.validation;
+package com.tamara.webcv.validation.media;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidVideoValidator.class)
+@Constraint(validatedBy = ValidVideoFieldValidator.class)
 public @interface ValidVideo {
-    String message() default "{validation.video.notnull}";
+    String message() default "{validation.video.invalid}";
 
     Class<?>[] groups() default {};
 

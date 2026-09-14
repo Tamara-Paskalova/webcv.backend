@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,6 +60,16 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(
                         "INPUT_VALIDATION_ERROR",
                         "Invalid input"
+                ));
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorResponse> handleResponseStatusException(ResponseStatusException exception) {
+        return ResponseEntity
+                .status(exception.getStatusCode())
+                .body(new ErrorResponse(
+                        "MEDIA_TYPE_ERROR",
+                        exception.getReason()
                 ));
     }
 

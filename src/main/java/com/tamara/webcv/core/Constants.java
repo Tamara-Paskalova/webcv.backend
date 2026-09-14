@@ -10,6 +10,8 @@ public class Constants {
     public static final String SECTION_CONTENT_TYPE_SKILLS = "skills";
     public static final String MEDIA_TYPE_VIDEO = "video";
     public static final String MEDIA_TYPE_IMAGE="image";
+    public static final String MEDIA_TYPE_DOCUMENT="document";
     public static final String STORAGE_IMAGE_FOLDER_NAME="images";
     public static final String STORAGE_VIDEO_FOLDER_NAME="videos";
+    public static final String STORAGE_DOCUMENT_FOLDER_NAME="documents";
 }

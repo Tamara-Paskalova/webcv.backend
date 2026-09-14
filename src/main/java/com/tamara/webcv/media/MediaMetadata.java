@@ -1,6 +1,6 @@
 package com.tamara.webcv.media;
 
-import com.tamara.webcv.validation.service.ValidationResult;
+import com.tamara.webcv.validation.media.ValidationResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

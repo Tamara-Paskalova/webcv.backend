@@ -1,8 +1,8 @@
 package com.tamara.webcv.media;
 
 import com.tamara.webcv.core.service.FileStorageService;
-import com.tamara.webcv.validation.service.ValidationResult;
-import com.tamara.webcv.validation.service.MediaValidator;
+import com.tamara.webcv.validation.media.ValidationResult;
+import com.tamara.webcv.validation.media.BaseMediaContentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 public abstract class MediaService<T extends MediaEntity> {
 
     @Autowired
-    private MediaValidator<T> businessValidator;
+    private BaseMediaContentValidator<T> businessValidator;
 
     @Autowired
     private FileStorageService storageService;

@@ -1,4 +1,4 @@
-package com.tamara.webcv.validation.service;
+package com.tamara.webcv.validation.media;
 
 import com.tamara.webcv.core.Constants;
 import com.tamara.webcv.exception.InvalidMediaException;
@@ -16,12 +16,13 @@ import java.time.Duration;
 import java.util.Set;
 
 @Component
-public class VideoValidator extends MediaValidator<Video> {
+public class VideoContentValidator extends BaseMediaContentValidator<Video> {
 
     private static final Duration MAX_DURATION =
             Duration.ofMinutes(10);
     private static final int MIN_WIDTH = 1280;
     private static final int MIN_HEIGHT = 720;
+    private static final String TEMP_FILE_PRIFIX = "video-validation-";
     private static final Set<String> ALLOWED_FORMATS =
             Set.of("mp4", "mov");
     private static final Set<String> ALLOWED_VIDEO_CODECS =
@@ -29,16 +30,13 @@ public class VideoValidator extends MediaValidator<Video> {
 
     @Override
     protected VideoRequestDTO createRequestDTO(MultipartFile file) {
-        return new VideoRequestDTO(Constants.MEDIA_TYPE_VIDEO, file);
+        return new VideoRequestDTO(file);
     }
 
     @Override
-    protected ValidationResult validateContent(MultipartFile file) {
-
-        Path tempFile = null;
+    protected ValidationResult validateContent(Path tempFile) {
 
         try {
-            tempFile = createTempFile(file);
 
             return validateTempFile(tempFile);
 
@@ -48,23 +46,12 @@ public class VideoValidator extends MediaValidator<Video> {
         } catch (Exception e) {
             throw new InvalidMediaException("Invalid or corrupted video", e);
 
-        } finally {
-            deleteTempFile(tempFile);
         }
     }
 
-    private Path createTempFile(
-            MultipartFile file
-    ) throws IOException {
-
-        Path tempFile = Files.createTempFile(
-                "video-validation-",
-                getExtension(file.getOriginalFilename())
-        );
-
-        file.transferTo(tempFile);
-
-        return tempFile;
+    @Override
+    protected String getTempFilePrefix() {
+        return TEMP_FILE_PRIFIX;
     }
 
     private ValidationResult validateTempFile(Path file) {
@@ -86,7 +73,7 @@ public class VideoValidator extends MediaValidator<Video> {
 
         } catch (Exception e) {
             throw new InvalidMediaException(
-                    "Invalid or corrupted video",
+                    "Invalid or corrupted video.",
                     e
             );
         }
@@ -224,35 +211,6 @@ public class VideoValidator extends MediaValidator<Video> {
             throw new InvalidMediaException(
                     "Video contains no decodable frames"
             );
-        }
-    }
-
-    private String getExtension(String filename) {
-
-        if (filename == null || filename.isBlank()) {
-            return ".tmp";
-        }
-
-        int dotIndex = filename.lastIndexOf('.');
-
-        if (dotIndex < 0
-                || dotIndex == filename.length() - 1) {
-            return ".tmp";
-        }
-
-        return filename.substring(dotIndex);
-    }
-
-    private void deleteTempFile(Path tempFile) {
-
-        if (tempFile == null) {
-            return;
-        }
-
-        try {
-            Files.deleteIfExists(tempFile);
-        } catch (IOException ignored) {
-            // Cleanup failure is intentionally ignored.
         }
     }
 }

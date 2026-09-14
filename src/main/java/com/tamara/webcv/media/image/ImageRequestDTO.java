@@ -2,7 +2,7 @@ package com.tamara.webcv.media.image;
 
 import com.tamara.webcv.core.Constants;
 import com.tamara.webcv.media.MediaRequestDTO;
-import com.tamara.webcv.validation.ValidImage;
+import com.tamara.webcv.validation.media.ValidImage;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class ImageRequestDTO implements MediaRequestDTO {
 
-    private String contentType = Constants.MEDIA_TYPE_IMAGE;
+    private final String contentType = Constants.MEDIA_TYPE_IMAGE;
 
     @ValidImage
     @NotNull

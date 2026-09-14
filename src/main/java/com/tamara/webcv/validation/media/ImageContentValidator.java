@@ -1,4 +1,4 @@
-package com.tamara.webcv.validation.service;
+package com.tamara.webcv.validation.media;
 
 import com.tamara.webcv.core.Constants;
 import com.tamara.webcv.exception.InvalidMediaException;
@@ -15,26 +15,24 @@ import java.nio.file.Path;
 import java.util.Set;
 
 @Component
-public class ImageValidator extends MediaValidator<Image> {
+public class ImageContentValidator extends BaseMediaContentValidator<Image> {
 
     private static final int MIN_WIDTH = 400;
-    private static final int MIN_HEIGHT = 400;
+    private static final int MIN_HEIGHT = 300;
+    private static final String TEMP_FILE_PREFIX = "image-validation-";
 
     private static final Set<String> ALLOWED_FORMATS =
             Set.of("jpeg", "jpg", "png", "webp");
 
     @Override
     protected ImageRequestDTO createRequestDTO(MultipartFile file) {
-        return new ImageRequestDTO(Constants.MEDIA_TYPE_IMAGE, file);
+        return new ImageRequestDTO(file);
     }
 
     @Override
-    protected ValidationResult validateContent(MultipartFile file) {
-
-        Path tempFile = null;
+    protected ValidationResult validateContent(Path tempFile) {
 
         try {
-            tempFile = createTempFile(file);
 
             return validateTempFile(tempFile);
 
@@ -42,14 +40,13 @@ public class ImageValidator extends MediaValidator<Image> {
             throw e;
 
         } catch (Exception e) {
-            throw new InvalidMediaException(
-                    "Invalid or corrupted image",
-                    e
-            );
-
-        } finally {
-            deleteTempFile(tempFile);
+            throw new InvalidMediaException("Invalid or corrupted image", e);
         }
+    }
+
+    @Override
+    protected String getTempFilePrefix() {
+        return TEMP_FILE_PREFIX;
     }
 
     private Path createTempFile(
@@ -177,18 +174,5 @@ public class ImageValidator extends MediaValidator<Image> {
         }
 
         return filename.substring(dotIndex);
-    }
-
-    private void deleteTempFile(Path tempFile) {
-
-        if (tempFile == null) {
-            return;
-        }
-
-        try {
-            Files.deleteIfExists(tempFile);
-        } catch (IOException ignored) {
-            // Cleanup failure is intentionally ignored.
-        }
     }
 }
