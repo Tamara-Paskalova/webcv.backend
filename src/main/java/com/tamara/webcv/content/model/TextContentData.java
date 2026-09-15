@@ -1,5 +1,6 @@
 package com.tamara.webcv.content.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tamara.webcv.core.Constants;
 import com.tamara.webcv.validation.SafeMap;
@@ -9,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -25,6 +25,7 @@ public class TextContentData implements ContentData {
     @SafeMap
     private Map<String, Map<String, String>> textElements;
 
+    @JsonIgnore
     @Override
     public String getContentType() {
         return this.contentType;
@@ -36,17 +37,10 @@ public class TextContentData implements ContentData {
             return this;
         }
 
-        Map<String, Map<String, String>> filtered = this.textElements.entrySet().stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> {
-                            Map<String, String> langMap = entry.getValue();
-                            String selectedText = langMap.getOrDefault(lang, langMap.get("en"));
-                            return Map.of(lang, selectedText);
-                        }
-                ));
+        Map<String, String> filtered = this.textElements.get(lang);
+
         TextContentData result = new TextContentData();
-        result.setTextElements(filtered);
+        result.setTextElements(Map.of(lang, filtered));
         result.setContentType(this.contentType);
         result.setVisible(this.visible);
         return result;

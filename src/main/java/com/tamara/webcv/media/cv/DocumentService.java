@@ -4,8 +4,10 @@ import com.tamara.webcv.core.Constants;
 import com.tamara.webcv.media.MediaResponseDTO;
 import com.tamara.webcv.media.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+@Service
 public class DocumentService extends MediaService<Document> {
 
     private static final Long UNIQUE_DOCUMENT_ID = 1L;

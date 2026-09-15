@@ -6,11 +6,13 @@ import com.tamara.webcv.media.cv.Document;
 import com.tamara.webcv.media.cv.DocumentRequestDTO;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
+@Component
 public class DocumentContentValidator extends BaseMediaContentValidator<Document> {
 
     private static final String TEMP_FILE_PREFIX = "document-validation-";
