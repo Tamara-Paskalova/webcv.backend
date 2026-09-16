@@ -3,8 +3,12 @@ package com.tamara.webcv.content.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tamara.webcv.core.Constants;
-import com.tamara.webcv.validation.SafeMap;
+import com.tamara.webcv.validation.SafeText;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,8 +26,12 @@ public class TextContentData implements ContentData {
     private boolean visible = true;
 
     @NotEmpty(message = "{validation.notblank}")
-    @SafeMap
-    private Map<String, Map<String, String>> textElements;
+    private Map<
+            @NotBlank @Size(max = 10, message = "{validation.size}") @SafeText String,
+            @Valid @NotNull Map<
+            @NotBlank @Size(max = 50, message = "{validation.size}") @SafeText String,
+            @NotBlank @Size(max = 3000, message = "{validation.size}") @SafeText String>
+            > textElements;
 
     @JsonIgnore
     @Override
@@ -37,7 +45,11 @@ public class TextContentData implements ContentData {
             return this;
         }
 
-        Map<String, String> filtered = this.textElements.get(lang);
+        Map<String, String> filtered = this.textElements.getOrDefault(lang, this.textElements.get("en"));
+
+        if (filtered == null) {
+            filtered = Map.of();
+        }
 
         TextContentData result = new TextContentData();
         result.setTextElements(Map.of(lang, filtered));

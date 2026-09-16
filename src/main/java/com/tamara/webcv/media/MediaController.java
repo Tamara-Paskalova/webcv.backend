@@ -15,9 +15,9 @@ public class MediaController {
     private MediaServiceFactory factory;
 
     @PostMapping(value = "/admin/media/{type}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> uploadMedia(@PathVariable String type, @RequestParam("file")MultipartFile file) {
+    public ResponseEntity<MediaResponseDTO> uploadMedia(@PathVariable String type, @RequestParam("file")MultipartFile file) {
         MediaService<? extends MediaEntity> mediaService = factory.get(type);
         MediaResponseDTO responseDTO = mediaService.saveOrUpdate(file, null);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 }

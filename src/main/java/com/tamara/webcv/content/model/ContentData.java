@@ -18,11 +18,11 @@ import com.tamara.webcv.core.Constants;
         ),
         @JsonSubTypes.Type(
                 value = CardContentData.class,
-                name = Constants.ABOUT_SECTION_CONTENT_TYPE_CARD
+                name = Constants.SECTION_CONTENT_TYPE_CARD
         ),
         @JsonSubTypes.Type(
-                value = ExpertiseContentData.class,
-                name = Constants.ABOUT_SECTION_CONTENT_TYPE_EXPERTIZE
+                value = SkillsContentData.class,
+                name = Constants.SECTION_CONTENT_TYPE_SKILLS
         )
 })
 public interface ContentData {

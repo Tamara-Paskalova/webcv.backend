@@ -5,7 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.tamara.webcv.core.Constants;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,14 +22,17 @@ import java.util.Map;
 @AllArgsConstructor
 public class CardContentData implements ContentData { // TODO add tests
 
-    private String contentType = Constants.ABOUT_SECTION_CONTENT_TYPE_CARD;
+    private String contentType = Constants.SECTION_CONTENT_TYPE_CARD;
 
     @JsonProperty("isVisible")
     private boolean visible = true;
 
     @NotEmpty(message = "{validation.notblank}")
     @JsonSetter(nulls = Nulls.AS_EMPTY)
-    private Map<String, List<Card>> textElements;
+    private Map<
+            @NotBlank @Size(max = 10, message = "{validation.size}") String,
+            @NotEmpty List<@Valid @NotNull Card>
+            > textElements;
 
     @JsonIgnore
     @Override
@@ -39,7 +46,12 @@ public class CardContentData implements ContentData { // TODO add tests
             return this;
         }
 
-        List<Card> localizedCards = this.textElements.get(lang);
-        return new CardContentData(this.contentType, this.visible, Map.of(lang, localizedCards));
+        List<Card> filtered = this.textElements.getOrDefault(lang, this.textElements.get("en"));
+
+        if (filtered == null) {
+            filtered = List.of();
+        }
+
+        return new CardContentData(this.contentType, this.visible, Map.of(lang, filtered));
     }
 }

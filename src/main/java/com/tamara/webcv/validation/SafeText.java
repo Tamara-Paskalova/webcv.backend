@@ -9,9 +9,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.TYPE_USE;
+
 @Documented
 @Constraint(validatedBy = SafeTextValidator.class)
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target({FIELD, TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SafeText{
     String message() default "{message.validation.unsafe}";

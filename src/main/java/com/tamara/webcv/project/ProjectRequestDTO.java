@@ -1,6 +1,5 @@
 package com.tamara.webcv.project;
 
-import com.tamara.webcv.validation.SafeStringList;
 import com.tamara.webcv.validation.SafeText;
 import com.tamara.webcv.validation.media.ValidImage;
 import jakarta.validation.constraints.*;
@@ -29,8 +28,7 @@ public class ProjectRequestDTO {
     private String description;
 
     @NotEmpty(message = "{validation.notblank}")
-    @SafeStringList
-    private List<String> technologies;
+    private List<@NotBlank(message = "{validation.notblank}") @Size(max = 50, message = "{validation.size}") @SafeText String> technologies;
 
     @Size(max = 100, message = "{validation.size}")
     @SafeText

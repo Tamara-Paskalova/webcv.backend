@@ -44,7 +44,7 @@ public class VideoContentValidator extends BaseMediaContentValidator<Video> {
             throw e;
 
         } catch (Exception e) {
-            throw new InvalidMediaException("Invalid or corrupted video", e);
+            throw new InvalidMediaException("Invalid or corrupted video.", e);
 
         }
     }
@@ -87,7 +87,7 @@ public class VideoContentValidator extends BaseMediaContentValidator<Video> {
 
         if (format == null || format.isBlank()) {
             throw new InvalidMediaException(
-                    "Unable to determine video format"
+                    "Unable to determine video format."
             );
         }
 
@@ -110,7 +110,7 @@ public class VideoContentValidator extends BaseMediaContentValidator<Video> {
 
         if (grabber.getVideoStream() < 0) {
             throw new InvalidMediaException(
-                    "File does not contain a video stream"
+                    "File does not contain a video stream."
             );
         }
 
@@ -118,7 +118,7 @@ public class VideoContentValidator extends BaseMediaContentValidator<Video> {
                 || grabber.getImageHeight() <= 0) {
 
             throw new InvalidMediaException(
-                    "Invalid video resolution"
+                    "Invalid video resolution."
             );
         }
     }
@@ -141,7 +141,7 @@ public class VideoContentValidator extends BaseMediaContentValidator<Video> {
                 || height < MIN_HEIGHT) {
 
             throw new InvalidMediaException(
-                    "Video resolution must be at least 1280x720"
+                    "Video resolution must be at least 1280x720."
             );
         }
 
@@ -176,7 +176,7 @@ public class VideoContentValidator extends BaseMediaContentValidator<Video> {
 
         if (durationMicros <= 0) {
             throw new InvalidMediaException(
-                    "Unable to determine video duration"
+                    "Unable to determine video duration."
             );
         }
 
@@ -187,7 +187,7 @@ public class VideoContentValidator extends BaseMediaContentValidator<Video> {
 
         if (duration.compareTo(MAX_DURATION) > 0) {
             throw new InvalidMediaException(
-                    "Video cannot exceed 10 minutes"
+                    "Video cannot exceed 10 minutes."
             );
         }
     }
@@ -209,7 +209,7 @@ public class VideoContentValidator extends BaseMediaContentValidator<Video> {
 
         if (decodedFrames == 0) {
             throw new InvalidMediaException(
-                    "Video contains no decodable frames"
+                    "Video contains no decodable frames."
             );
         }
     }

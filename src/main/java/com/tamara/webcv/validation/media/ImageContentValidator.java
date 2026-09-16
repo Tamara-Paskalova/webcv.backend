@@ -1,6 +1,5 @@
 package com.tamara.webcv.validation.media;
 
-import com.tamara.webcv.core.Constants;
 import com.tamara.webcv.exception.InvalidMediaException;
 import com.tamara.webcv.media.image.Image;
 import com.tamara.webcv.media.image.ImageRequestDTO;
@@ -9,16 +8,14 @@ import org.bytedeco.javacv.Frame;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
 
 @Component
 public class ImageContentValidator extends BaseMediaContentValidator<Image> {
 
-    private static final int MIN_WIDTH = 400;
-    private static final int MIN_HEIGHT = 300;
+    private static final int MIN_WIDTH = 640;
+    private static final int MIN_HEIGHT = 480;
     private static final String TEMP_FILE_PREFIX = "image-validation-";
 
     private static final Set<String> ALLOWED_FORMATS =
@@ -47,20 +44,6 @@ public class ImageContentValidator extends BaseMediaContentValidator<Image> {
     @Override
     protected String getTempFilePrefix() {
         return TEMP_FILE_PREFIX;
-    }
-
-    private Path createTempFile(
-            MultipartFile file
-    ) throws IOException {
-
-        Path tempFile = Files.createTempFile(
-                "image-validation-",
-                getExtension(file.getOriginalFilename())
-        );
-
-        file.transferTo(tempFile);
-
-        return tempFile;
     }
 
     private ValidationResult validateTempFile(Path file) {
@@ -157,22 +140,5 @@ public class ImageContentValidator extends BaseMediaContentValidator<Image> {
                     "Image cannot be decoded"
             );
         }
-    }
-
-    private String getExtension(String filename) {
-
-        if (filename == null || filename.isBlank()) {
-            return ".tmp";
-        }
-
-        int dotIndex =
-                filename.lastIndexOf('.');
-
-        if (dotIndex < 0
-                || dotIndex == filename.length() - 1) {
-            return ".tmp";
-        }
-
-        return filename.substring(dotIndex);
     }
 }

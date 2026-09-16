@@ -40,7 +40,7 @@ public class DocumentContentValidator extends BaseMediaContentValidator<Document
         } catch (IOException e) {
             throw new InvalidMediaException("Invalid document content. The file is corrupted or manipulated", e);
         } catch (Exception e) {
-            throw new InvalidMediaException("Error occurred during document validation.");
+            throw new InvalidMediaException(e.getMessage());
         }
     }
 

@@ -7,8 +7,8 @@ public class Constants {
     public static final String MESSAGE_FULL_ADMIN_ENDPOINT = "/api/admin/message";
     public static final String TURNSTILE_HEADER_NAME = "cf-turnstile-response";
     public static final String SECTION_CONTENT_TYPE_TEXT = "text-content";
-    public static final String ABOUT_SECTION_CONTENT_TYPE_EXPERTIZE = "expertize";
-    public static final String ABOUT_SECTION_CONTENT_TYPE_CARD = "card";
+    public static final String SECTION_CONTENT_TYPE_SKILLS = "skills";
+    public static final String SECTION_CONTENT_TYPE_CARD = "card";
     public static final String MEDIA_TYPE_VIDEO = "video";
     public static final String MEDIA_TYPE_IMAGE="image";
     public static final String MEDIA_TYPE_DOCUMENT="document";
