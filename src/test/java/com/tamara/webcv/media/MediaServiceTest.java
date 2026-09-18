@@ -3,10 +3,10 @@ package com.tamara.webcv.media;
 import com.tamara.webcv.core.service.FileStorageService;
 import com.tamara.webcv.validation.media.BaseMediaContentValidator;
 import com.tamara.webcv.validation.media.ValidationResult;
+import lombok.Setter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -37,12 +37,9 @@ class MediaServiceTest {
     private static class TestMediaEntity extends MediaEntity {}
     private static class TestMediaResponseDTO extends MediaResponseDTO {}
 
+    @Setter
     private static class TestMediaService extends MediaService<TestMediaEntity> {
         private TestMediaEntity entityToReturn;
-
-        public void setEntityToReturn(TestMediaEntity entityToReturn) {
-            this.entityToReturn = entityToReturn;
-        }
 
         @Override protected String getTargetFolder() { return "test-folder"; }
         @Override protected boolean supports(String contentType) { return "test-type".equals(contentType); }

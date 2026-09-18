@@ -12,7 +12,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "VIDEO")
+@Table(name = "video")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,6 +20,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class Video extends MediaEntity {
 
-    @Column(name = "VIDEO_VERSION")
+    @Column(name = "video_version")
     private int videoVersion;
 }

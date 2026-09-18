@@ -1,27 +1,22 @@
 package com.tamara.webcv.message;
 
-import com.tamara.webcv.core.ClientIpResolver;
+import com.tamara.webcv.core.security.CaptchaFilter;
+import com.tamara.webcv.core.security.JwtAuthenticationFilter;
 import com.tamara.webcv.core.security.RateLimitFilter;
-import com.tamara.webcv.core.service.TurnstileService;
+import com.tamara.webcv.core.security.SecurityFilterConfig;
 import com.tamara.webcv.exception.FileStorageException;
 import com.tamara.webcv.validation.SafeTextValidator;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.RestTemplate;
-
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
-import org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration;
-import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +30,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(
         controllers = MessageController.class,
-        excludeAutoConfiguration = {
-                DataSourceAutoConfiguration.class,
-                HibernateJpaAutoConfiguration.class,
-                SecurityAutoConfiguration.class
-        }
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = {
+                        SecurityFilterConfig.class,
+                        RateLimitFilter.class,
+                        CaptchaFilter.class,
+                        JwtAuthenticationFilter.class
+                }
+        )
 )
+@AutoConfigureMockMvc(addFilters = false)
+@ActiveProfiles("test")
 @Import(SafeTextValidator.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class MessageControllerTest {
 
     @Autowired
@@ -51,28 +51,6 @@ class MessageControllerTest {
     @MockitoBean
     private MessageService service;
 
-    @MockitoBean
-    private RestTemplate restTemplate;
-
-    @MockitoBean
-    private ClientIpResolver clientIpResolver;
-
-    @MockitoBean
-    private TurnstileService turnstileService;
-
-    @MockitoBean
-    private RateLimitFilter rateLimitFilter;
-
-    @BeforeEach
-    void setUp() throws Exception {
-        doAnswer(invocation -> {
-            HttpServletRequest request = invocation.getArgument(0);
-            HttpServletResponse response = invocation.getArgument(1);
-            FilterChain chain = invocation.getArgument(2);
-            chain.doFilter(request, response);
-            return null;
-        }).when(rateLimitFilter).doFilter(any(), any(), any());
-    }
 
     @Test
     void receiveMessage() throws Exception {

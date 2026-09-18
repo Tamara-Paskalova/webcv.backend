@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://liquibase.org"
+        xmlns:xsi="http://w3.org"
+        xsi:schemaLocation="http://liquibase.org
+        http://liquibase.org">
+
+    <changeSet id="1" author="tamara">
+
+        <createTable tableName="image">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="unique_file_name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="media_metadata" type="jsonb"/>
+            <column name="created_at" type="timestamp"/>
+        </createTable>
+        <createTable tableName="video">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="unique_file_name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="media_metadata" type="jsonb"/>
+            <column name="video_version" type="int"/>
+            <column name="created_at" type="timestamp"/>
+        </createTable>
+        <createTable tableName="document">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="unique_file_name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="media_metadata" type="jsonb"/>
+            <column name="document_version" type="int"/>
+            <column name="created_at" type="timestamp"/>
+        </createTable>
+
+        <createTable tableName="projects">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="is_in_progress" type="boolean" defaultValue="true"/>
+            <column name="project_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_description" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="used_technologies" type="text[]">
+                <constraints nullable="false"/>
+            </column>
+            <column name="github_url" type="varchar(100)"/>
+            <column name="project_url" type="varchar(100)"/>
+            <column name="image_id" type="bigint"/>
+            <column name="priority" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="projects"
+                                 baseColumnNames="image_id"
+                                 constraintName="fk_projects_image"
+                                 referencedTableName="image"
+                                 referencedColumnNames="id"
+                                 onDelete="SET NULL"/>
+
+        <createTable tableName="content">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="section_name" type="varchar(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="section_content" type="jsonb">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp"/>
+        </createTable>
+
+        <createTable tableName="contact_messages">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="sender_name" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sender_email" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sender_message" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_read" type="boolean" defaultValue="false"/>
+            <column name="created_at" type="timestamp"/>
+        </createTable>
+
+    </changeSet>
+</databaseChangeLog>

@@ -16,12 +16,12 @@ import org.hibernate.type.SqlTypes;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@Table(name = "CONTENT")
+@Table(name = "content")
 public class Content extends BaseEntity {
-    @Column(name = "SECTION_NAME", nullable = false, unique = true)
+    @Column(name = "section_name", nullable = false, unique = true)
     private String sectionName;
 
-    @Column(name = "SECTION_CONTENT", columnDefinition = "jsonb", nullable = false)
+    @Column(name = "section_content", columnDefinition = "jsonb", nullable = false)
     @JdbcTypeCode(SqlTypes.JSON)
     private ContentData contentData;
 

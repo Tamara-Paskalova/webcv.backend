@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class SafeTextValidatorTest {
 
-    private SafeTextValidator validator;
+    private final SafeTextValidator validator;
 
     public SafeTextValidatorTest() {
         validator = new SafeTextValidator();

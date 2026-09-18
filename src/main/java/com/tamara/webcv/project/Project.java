@@ -15,7 +15,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.util.List;
 
 @Entity
-@Table(name = "PROJECTS")
+@Table(name = "project")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,29 +23,29 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Project extends BaseEntity {
-    @Column(name = "IS_IN_PROGRESS")
+    @Column(name = "is_in_progress")
     private boolean isInProgress;
 
-    @Column(name = "PROJECT_NAME", nullable = false)
+    @Column(name = "project_name", nullable = false)
     private String name;
 
-    @Column(name = "PROJECT_DESCRIPTION", nullable = false)
+    @Column(name = "project_description", nullable = false)
     private String description;
 
-    @Column(name = "USED_TECHNOLOGIES", columnDefinition = "text[]", nullable = false)
+    @Column(name = "used_technology", columnDefinition = "text[]", nullable = false)
     private List<String> technologies;
 
-    @Column(name = "GITHUB_URL")
+    @Column(name = "github_url")
     private String githubUrl;
 
-    @Column(name = "PROJECT_URL")
+    @Column(name = "project_url")
     private String projectUrl;
 
     @OneToOne
-    @JoinColumn(name = "IMAGE_ID")
+    @JoinColumn(name = "image_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Image image;
 
-    @Column(name = "PRIORITY", nullable = false)
+    @Column(name = "priority", nullable = false)
     private Integer priority;
 }

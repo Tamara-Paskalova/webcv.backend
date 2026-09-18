@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Table(name = "DOCUMENT")
+@Table(name = "document")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,6 +15,6 @@ import lombok.*;
 @ToString(callSuper = true)
 public class Document extends MediaEntity {
 
-    @Column(name = "DOCUMENT_VERSION")
+    @Column(name = "document_version")
     private int version;
 }

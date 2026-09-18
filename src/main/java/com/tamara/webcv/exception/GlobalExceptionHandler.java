@@ -73,4 +73,26 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(InvalidMediaException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidMediaException(InvalidMediaException exception) {
+        log.warn("Media validation failed: {}", exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(
+                        "INVALID_MEDIA_CONTENT",
+                        exception.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception exception) {
+        log.error("Unexpected internal server error triggered", exception);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(
+                        "INTERNAL_SERVER_ERROR",
+                        "An unexpected error occurred on the server."
+                ));
+    }
+
 }

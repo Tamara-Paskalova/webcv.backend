@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Table(name = "CONTACT_MESSAGES")
+@Table(name = "contact_messages")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,15 +16,15 @@ import lombok.*;
 @ToString(callSuper = true)
 public class Message extends BaseEntity {
 
-    @Column(name = "SENDER_NAME", nullable = false)
+    @Column(name = "sender_name", nullable = false)
     private String name;
 
-    @Column(name = "SENDER_EMAIL", nullable = false)
+    @Column(name = "sender_email", nullable = false)
     private String email;
 
-    @Column(name = "SENDER_MESSAGE", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "sender_message", columnDefinition = "TEXT", nullable = false)
     private String messageText;
 
-    @Column(name = "IS_READ")
+    @Column(name = "is_read")
     private boolean isRead = false;
 }

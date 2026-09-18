@@ -1,6 +1,5 @@
 package com.tamara.webcv.validation.media;
 
-import com.tamara.webcv.core.Constants;
 import com.tamara.webcv.exception.InvalidMediaException;
 import com.tamara.webcv.media.video.Video;
 import com.tamara.webcv.media.video.VideoRequestDTO;
@@ -9,8 +8,6 @@ import org.bytedeco.javacv.Frame;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Set;
