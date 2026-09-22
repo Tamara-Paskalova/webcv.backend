@@ -1,4 +1,4 @@
-package com.tamara.webcv.media.cv;
+package com.tamara.webcv.media.document;
 
 import com.tamara.webcv.media.MediaRepository;
 import org.springframework.stereotype.Repository;

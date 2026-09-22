@@ -2,7 +2,7 @@ package com.tamara.webcv.validation.media;
 
 import com.tamara.webcv.exception.InvalidMediaException;
 import com.tamara.webcv.media.MediaRequestDTO;
-import com.tamara.webcv.media.cv.Document;
+import com.tamara.webcv.media.document.Document;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;

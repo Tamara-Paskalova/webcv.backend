@@ -26,14 +26,22 @@ public class S3Config {
     @Value("${supabase.s3.region}")
     private String region;
 
+    @Value("${s3.path-style-enabled:false}")
+    private boolean pathStyleEnabled;
+
     @Bean
     public S3Client s3Client() {
+
         return S3Client.builder()
                 .endpointOverride(URI.create(endpoint))
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(keyId.trim(), secretKey.trim())))
                 .region(Region.of(region))
-                .forcePathStyle(true)
+                .serviceConfiguration(S3Configuration.builder()
+                        .pathStyleAccessEnabled(pathStyleEnabled)
+                        .chunkedEncodingEnabled(false)
+                        .checksumValidationEnabled(false)
+                        .build())
                 .build();
     }
 

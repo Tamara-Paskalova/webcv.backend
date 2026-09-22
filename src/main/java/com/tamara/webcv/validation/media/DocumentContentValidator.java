@@ -2,8 +2,8 @@ package com.tamara.webcv.validation.media;
 
 import com.tamara.webcv.exception.InvalidMediaException;
 import com.tamara.webcv.media.MediaRequestDTO;
-import com.tamara.webcv.media.cv.Document;
-import com.tamara.webcv.media.cv.DocumentRequestDTO;
+import com.tamara.webcv.media.document.Document;
+import com.tamara.webcv.media.document.DocumentRequestDTO;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.stereotype.Component;

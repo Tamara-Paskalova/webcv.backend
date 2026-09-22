@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog
-        xmlns="http://liquibase.org"
-        xmlns:xsi="http://w3.org"
-        xsi:schemaLocation="http://liquibase.org
-        http://liquibase.org">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="1" author="tamara">
-
         <createTable tableName="image">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
@@ -40,8 +38,8 @@
             <column name="created_at" type="timestamp"/>
         </createTable>
 
-        <createTable tableName="projects">
-            <column name="id" type="bigserial">
+        <createTable tableName="project">
+            <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="is_in_progress" type="boolean" defaultValue="true"/>
@@ -63,7 +61,7 @@
             <column name="created_at" type="timestamp"/>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="projects"
+        <addForeignKeyConstraint baseTableName="project"
                                  baseColumnNames="image_id"
                                  constraintName="fk_projects_image"
                                  referencedTableName="image"
@@ -71,7 +69,7 @@
                                  onDelete="SET NULL"/>
 
         <createTable tableName="content">
-            <column name="id" type="bigserial">
+            <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="section_name" type="varchar(100)">
@@ -84,7 +82,7 @@
         </createTable>
 
         <createTable tableName="contact_messages">
-            <column name="id" type="bigserial">
+            <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="sender_name" type="varchar(150)">

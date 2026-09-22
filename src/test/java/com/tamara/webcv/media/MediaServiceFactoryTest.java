@@ -1,6 +1,6 @@
 package com.tamara.webcv.media;
 
-import com.tamara.webcv.media.cv.DocumentService;
+import com.tamara.webcv.media.document.DocumentService;
 import com.tamara.webcv.media.image.ImageService;
 import com.tamara.webcv.media.video.VideoService;
 import org.junit.jupiter.api.BeforeEach;

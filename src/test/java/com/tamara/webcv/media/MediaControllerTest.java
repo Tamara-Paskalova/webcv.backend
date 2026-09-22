@@ -4,7 +4,7 @@ import com.tamara.webcv.core.security.CaptchaFilter;
 import com.tamara.webcv.core.security.JwtAuthenticationFilter;
 import com.tamara.webcv.core.security.RateLimitFilter;
 import com.tamara.webcv.core.security.SecurityFilterConfig;
-import com.tamara.webcv.media.cv.DocumentResponseDTO;
+import com.tamara.webcv.media.document.DocumentResponseDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

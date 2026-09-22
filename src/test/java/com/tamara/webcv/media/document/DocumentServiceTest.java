@@ -1,4 +1,4 @@
-package com.tamara.webcv.media.cv;
+package com.tamara.webcv.media.document;
 
 import com.tamara.webcv.core.Constants;
 import com.tamara.webcv.media.MediaMetadata;

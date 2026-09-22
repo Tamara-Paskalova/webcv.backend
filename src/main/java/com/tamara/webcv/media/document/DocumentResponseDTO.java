@@ -1,4 +1,4 @@
-package com.tamara.webcv.media.cv;
+package com.tamara.webcv.media.document;
 
 import com.tamara.webcv.media.MediaMetadata;
 import com.tamara.webcv.media.MediaResponseDTO;
@@ -21,5 +21,5 @@ public class DocumentResponseDTO extends MediaResponseDTO {
         super(id, mediaMetadata, fileUrl);
 
         this.version = version;
-    };
+    }
 }
