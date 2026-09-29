@@ -14,8 +14,8 @@ import java.util.Set;
 @Component
 public class ImageContentValidator extends BaseMediaContentValidator<Image> {
 
-    private static final int MIN_WIDTH = 640;
-    private static final int MIN_HEIGHT = 480;
+    private static final int MIN_WIDTH = 480;
+    private static final int MIN_HEIGHT = 640;
     private static final String TEMP_FILE_PREFIX = "image-validation-";
 
     private static final Set<String> ALLOWED_FORMATS =

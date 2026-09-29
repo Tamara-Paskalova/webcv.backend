@@ -4,9 +4,12 @@ import com.tamara.webcv.core.service.FileStorageService;
 import com.tamara.webcv.validation.media.ValidationResult;
 import com.tamara.webcv.validation.media.BaseMediaContentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 public abstract class MediaService<T extends MediaEntity> {
@@ -86,6 +89,14 @@ public abstract class MediaService<T extends MediaEntity> {
         String fileName = media.getUniqueFileName();
         String fileUrl = storageService.getFileUrl(fileName);
         return getDTO(media, fileUrl);
+    }
+
+    public List<MediaResponseDTO> getAll(String type) {
+        List<T> entities = repository.findAllByMetadataType(type);
+
+        return entities.stream()
+                .map(this::buildResponseDTO)
+                .toList();
     }
 
 }

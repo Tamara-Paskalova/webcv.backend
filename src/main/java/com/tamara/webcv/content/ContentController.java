@@ -36,7 +36,7 @@ public class ContentController {
         return new ResponseEntity<>(contentResponseDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/admin/content/all")
+    @GetMapping("/content/all")
     public ResponseEntity<List<ContentResponseDTO>> getAllContent() {
         List<ContentResponseDTO> contentResponseDTOS = service.getContent();
         return new ResponseEntity<>(contentResponseDTOS, HttpStatus.OK);

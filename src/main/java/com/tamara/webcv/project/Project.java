@@ -32,7 +32,7 @@ public class Project extends BaseEntity {
     @Column(name = "project_description", nullable = false)
     private String description;
 
-    @Column(name = "used_technologies", columnDefinition = "text[]", nullable = false)
+    @Column(name = "used_technologies", nullable = false)
     private List<String> technologies;
 
     @Column(name = "github_url")

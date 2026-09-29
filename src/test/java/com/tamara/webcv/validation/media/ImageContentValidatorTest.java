@@ -34,7 +34,7 @@ class ImageContentValidatorTest {
     @Test
     @DisplayName("1: Positive scenario. Valid WEBP image should pass validation.")
     void validateContentValidImageShouldPass() {
-        Path path = Path.of("src/test/resources/test-media/valid-image.png");
+        Path path = Path.of("src/test/resources/test-media/valid-image.webp");
 
         ValidationResult result = validator.validateContent(path);
 
@@ -42,8 +42,8 @@ class ImageContentValidatorTest {
         assertInstanceOf(ValidationResult.Visual.class, result);
 
         ValidationResult.Visual visualResult = (ValidationResult.Visual) result;
-        assertEquals(512, visualResult.height());
-        assertEquals(768, visualResult.width());
+        assertEquals(700, visualResult.height());
+        assertEquals(1050, visualResult.width());
 
     }
 
@@ -147,8 +147,8 @@ class ImageContentValidatorTest {
                 (mock, context) -> {
                     when(mock.getFormat()).thenReturn("webp");
                     when(mock.getVideoStream()).thenReturn(0);
-                    when(mock.getImageWidth()).thenReturn(640);
-                    when(mock.getImageHeight()).thenReturn(480);
+                    when(mock.getImageWidth()).thenReturn(480);
+                    when(mock.getImageHeight()).thenReturn(640);
 
                     try {
                         when(mock.grab()).thenReturn(null);
